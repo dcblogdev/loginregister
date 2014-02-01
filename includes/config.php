@@ -12,8 +12,8 @@ define('DBPASS','password');
 define('DBNAME','database name');
 
 //application address
-define('DIR','http://localhost:8888/loginandregister/');
-define('SITEEMAIL','noreply@daveismyname.com');
+define('DIR','http://domain.com/');
+define('SITEEMAIL','noreply@domain.com');
 
 try {
 
