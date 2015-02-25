@@ -73,7 +73,7 @@ if(isset($_POST['submit'])){
 			$subject = "Registration Confirmation";
 			$body = "Thank you for registering at demo site.\n\n To activate your account, please click on this link:\n\n ".DIR."activate.php?x=$id&y=$activasion\n\n Regards Site Admin \n\n";
 			$additionalheaders = "From: <".SITEEMAIL.">\r\n";
-			$additionalheaders .= "Reply-To: $".SITEEMAIL."";
+			$additionalheaders .= "Reply-To: ".SITEEMAIL."";
 			mail($to, $subject, $body, $additionalheaders);
 
 			//redirect to index page
