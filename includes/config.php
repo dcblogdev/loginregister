@@ -17,7 +17,7 @@ define('SITEEMAIL','noreply@domain.com');
 
 try {
 
-	//create PDO connection 
+	//create PDO connection
 	$db = new PDO("mysql:host=".DBHOST.";port=8889;dbname=".DBNAME, DBUSER, DBPASS);
 	$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -29,5 +29,6 @@ try {
 
 //include the user class, pass in the database connection
 include('classes/user.php');
-$user = new User($db); 
+include('classes/phpmailer/mail.php');
+$user = new User($db);
 ?>

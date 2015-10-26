@@ -1,7 +1,7 @@
-<?php require('includes/config.php'); 
+<?php require('includes/config.php');
 
 //if logged in redirect to members page
-if( $user->is_logged_in() ){ header('Location: memberpage.php'); } 
+if( $user->is_logged_in() ){ header('Location: memberpage.php'); }
 
 //if form has been submitted process it
 if(isset($_POST['submit'])){
@@ -17,7 +17,7 @@ if(isset($_POST['submit'])){
 		if(empty($row['email'])){
 			$error[] = 'Email provided is not on recognised.';
 		}
-			
+
 	}
 
 	//if no errors have been created carry on
@@ -37,10 +37,16 @@ if(isset($_POST['submit'])){
 			//send email
 			$to = $row['email'];
 			$subject = "Password Reset";
-			$body = "Someone requested that the password be reset. \n\nIf this was a mistake, just ignore this email and nothing will happen.\n\nTo reset your password, visit the following address: ".DIR."resetPassword.php?key=$token";
-			$additionalheaders = "From: <".SITEEMAIL.">\r\n";
-			$additionalheaders .= "Reply-To: $".SITEEMAIL."";
-			mail($to, $subject, $body, $additionalheaders);
+			$body = "<p>Someone requested that the password be reset.</p>
+			<p>If this was a mistake, just ignore this email and nothing will happen.</p>
+			<p>To reset your password, visit the following address: <a href='".DIR."resetPassword.php?key=$token'>".DIR."resetPassword.php?key=$token</a></p>";
+
+			$mail = new Mail();
+			$mail->setFrom(SITEEMAIL);
+			$mail->addAddress($to);
+			$mail->subject($subject);
+			$mail->body($body);
+			$mail->send();
 
 			//redirect to index page
 			header('Location: login.php?action=reset');
@@ -59,7 +65,7 @@ if(isset($_POST['submit'])){
 $title = 'Reset Account';
 
 //include header template
-require('layout/header.php'); 
+require('layout/header.php');
 ?>
 
 <div class="container">
@@ -97,7 +103,7 @@ require('layout/header.php');
 				<div class="form-group">
 					<input type="email" name="email" id="email" class="form-control input-lg" placeholder="Email" value="" tabindex="1">
 				</div>
-				
+
 				<hr>
 				<div class="row">
 					<div class="col-xs-6 col-md-6"><input type="submit" name="submit" value="Sent Reset Link" class="btn btn-primary btn-block btn-lg" tabindex="2"></div>
@@ -109,7 +115,7 @@ require('layout/header.php');
 
 </div>
 
-<?php 
+<?php
 //include header template
-require('layout/footer.php'); 
+require('layout/footer.php');
 ?>

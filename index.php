@@ -1,7 +1,7 @@
-<?php require('includes/config.php'); 
+<?php require('includes/config.php');
 
 //if logged in redirect to members page
-if( $user->is_logged_in() ){ header('Location: memberpage.php'); } 
+if( $user->is_logged_in() ){ header('Location: memberpage.php'); }
 
 //if form has been submitted process it
 if(isset($_POST['submit'])){
@@ -17,7 +17,7 @@ if(isset($_POST['submit'])){
 		if(!empty($row['username'])){
 			$error[] = 'Username provided is already in use.';
 		}
-			
+
 	}
 
 	if(strlen($_POST['password']) < 3){
@@ -43,7 +43,7 @@ if(isset($_POST['submit'])){
 		if(!empty($row['email'])){
 			$error[] = 'Email provided is already in use.';
 		}
-			
+
 	}
 
 
@@ -71,10 +71,16 @@ if(isset($_POST['submit'])){
 			//send email
 			$to = $_POST['email'];
 			$subject = "Registration Confirmation";
-			$body = "Thank you for registering at demo site.\n\n To activate your account, please click on this link:\n\n ".DIR."activate.php?x=$id&y=$activasion\n\n Regards Site Admin \n\n";
-			$additionalheaders = "From: <".SITEEMAIL.">\r\n";
-			$additionalheaders .= "Reply-To: ".SITEEMAIL."";
-			mail($to, $subject, $body, $additionalheaders);
+			$body = "<p>Thank you for registering at demo site.</p>
+			<p>To activate your account, please click on this link: <a href='".DIR."activate.php?x=$id&y=$activasion'>".DIR."activate.php?x=$id&y=$activasion</a></p>
+			<p>Regards Site Admin</p>";
+
+			$mail = new Mail();
+			$mail->setFrom(SITEEMAIL);
+			$mail->addAddress($to);
+			$mail->subject($subject);
+			$mail->body($body);
+			$mail->send();
 
 			//redirect to index page
 			header('Location: index.php?action=joined');
@@ -93,7 +99,7 @@ if(isset($_POST['submit'])){
 $title = 'Demo';
 
 //include header template
-require('layout/header.php'); 
+require('layout/header.php');
 ?>
 
 
@@ -139,7 +145,7 @@ require('layout/header.php');
 						</div>
 					</div>
 				</div>
-				
+
 				<div class="row">
 					<div class="col-xs-6 col-md-6"><input type="submit" name="submit" value="Register" class="btn btn-primary btn-block btn-lg" tabindex="5"></div>
 				</div>
@@ -149,7 +155,7 @@ require('layout/header.php');
 
 </div>
 
-<?php 
+<?php
 //include header template
-require('layout/footer.php'); 
+require('layout/footer.php');
 ?>
