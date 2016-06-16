@@ -1,7 +1,7 @@
 <?php require('includes/config.php'); 
 
 //if logged in redirect to members page
-if( $user->is_logged_in() ){ header('Location: memberpage.php'); } 
+if( $user->is_logged_in() ){ header('Location: memberpage.php'); exit(); }
 
 $stmt = $db->prepare('SELECT resetToken, resetComplete FROM members WHERE resetToken = :token');
 $stmt->execute(array(':token' => $_GET['key']));

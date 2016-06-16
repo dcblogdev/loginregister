@@ -1,7 +1,7 @@
 <?php require('includes/config.php');
 
 //if logged in redirect to members page
-if( $user->is_logged_in() ){ header('Location: memberpage.php'); }
+if( $user->is_logged_in() ){ header('Location: memberpage.php'); exit(); }
 
 //if form has been submitted process it
 if(isset($_POST['submit'])){
