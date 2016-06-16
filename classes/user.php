@@ -24,7 +24,8 @@ class User extends Password{
 	}
 
 	public function login($username,$password){
-
+		if (strlen($username) < 3) return false;
+		if (strlen($password) < 3) return false;
 		$row = $this->get_user_hash($username);
 
 		if($this->password_verify($password,$row['password']) == 1){

@@ -17,6 +17,9 @@ if(empty($row['resetToken'])){
 //if form has been submitted process it
 if(isset($_POST['submit'])){
 
+	if (!isset($_POST['password']) || !isset($_POST['username'])) $error[] = 'Both a Username and Password are required
+	to be entered';
+
 	//basic validation
 	if(strlen($_POST['password']) < 3){
 		$error[] = 'Password is too short.';
