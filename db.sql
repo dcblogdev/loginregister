@@ -7,4 +7,4 @@ CREATE TABLE `members` (
   `resetToken` varchar(255) DEFAULT NULL,
   `resetComplete` varchar(3) DEFAULT 'No',
   PRIMARY KEY (`memberID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
