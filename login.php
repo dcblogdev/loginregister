@@ -11,7 +11,7 @@ if(isset($_POST['submit'])){
 	if (!isset($_POST['username'])) $error[] = "Please fill out all fields";
 	if (!isset($_POST['password'])) $error[] = "Please fill out all fields";
 
-	$username = htmlspecialchars_decode($_POST['username'], ENT_QUOTES);
+	$username = $_POST['username'];
 	if ( $user->isValidUsername($username)){
 		if (!isset($_POST['password'])){
 			$error[] = 'A password must be entered';

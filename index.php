@@ -10,10 +10,10 @@ if(isset($_POST['submit'])){
     if (!isset($_POST['email'])) $error[] = "Please fill out all fields";
     if (!isset($_POST['password'])) $error[] = "Please fill out all fields";
 
-	$username = htmlspecialchars_decode($_POST['username'], ENT_QUOTES);
+	$username = $_POST['username'];
 
 	//very basic validation
-	if($user->isValidUsername($username)){
+	if(!$user->isValidUsername($username)){
 		$error[] = 'Usernames must be at least 3 Alphanumeric characters';
 	} else {
 		$stmt = $db->prepare('SELECT username FROM members WHERE username = :username');
