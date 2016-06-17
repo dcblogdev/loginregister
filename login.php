@@ -7,8 +7,12 @@ if( $user->is_logged_in() ){ header('Location: index.php'); exit(); }
 
 //process login form if submitted
 if(isset($_POST['submit'])){
-	if ( $user->isValidUsername($_POST['username'])){
-		$username = $_POST['username'];
+
+	$username = htmlspecialchars_decode($_POST['username'], ENT_QUOTES);
+	if ( $user->isValidUsername($username)){
+		if (!isset($_POST['password'])){
+			$error[] = 'A password must be entered';
+		}
 		$password = $_POST['password'];
 
 		if($user->login($username,$password)){
