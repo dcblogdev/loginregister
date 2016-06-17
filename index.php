@@ -6,6 +6,10 @@ if( $user->is_logged_in() ){ header('Location: memberpage.php'); exit(); }
 //if form has been submitted process it
 if(isset($_POST['submit'])){
 
+    if (!isset($_POST['username'])) $error[] = "Please fill out all fields";
+    if (!isset($_POST['email'])) $error[] = "Please fill out all fields";
+    if (!isset($_POST['password'])) $error[] = "Please fill out all fields";
+
 	$username = htmlspecialchars_decode($_POST['username'], ENT_QUOTES);
 
 	//very basic validation

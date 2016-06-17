@@ -6,6 +6,10 @@ if( $user->is_logged_in() ){ header('Location: memberpage.php'); exit(); }
 //if form has been submitted process it
 if(isset($_POST['submit'])){
 
+	//Make sure all POSTS are declared
+	if (!isset($_POST['email'])) $error[] = "Please fill out all fields";
+
+
 	//email validation
 	if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
 	    $error[] = 'Please enter a valid email address';
