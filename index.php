@@ -7,8 +7,8 @@ if( $user->is_logged_in() ){ header('Location: memberpage.php'); exit(); }
 if(isset($_POST['submit'])){
 
 	//very basic validation
-	if(strlen($_POST['username']) < 3){
-		$error[] = 'Username is too short.';
+	if($user->isValidUsername($_POST['username'])){
+		$error[] = 'Usernames must be at least 3 Alphanumeric characters';
 	} else {
 		$stmt = $db->prepare('SELECT username FROM members WHERE username = :username');
 		$stmt->execute(array(':username' => $_POST['username']));

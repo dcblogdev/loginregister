@@ -7,18 +7,23 @@ if( $user->is_logged_in() ){ header('Location: index.php'); exit(); }
 
 //process login form if submitted
 if(isset($_POST['submit'])){
+	if ( $user->isValidUsername($_POST['username'])){
+		$username = $_POST['username'];
+		$password = $_POST['password'];
 
-	$username = $_POST['username'];
-	$password = $_POST['password'];
-	
-	if($user->login($username,$password)){ 
-		$_SESSION['username'] = $username;
-		header('Location: memberpage.php');
-		exit;
-	
-	} else {
-		$error[] = 'Wrong username or password or your account has not been activated.';
+		if($user->login($username,$password)){
+			$_SESSION['username'] = $username;
+			header('Location: memberpage.php');
+			exit;
+
+		} else {
+			$error[] = 'Wrong username or password or your account has not been activated.';
+		}
+	}else{
+		$error[] = 'Usernames are required to be Alphanumeric, and between 3-16 characters long';
 	}
+
+
 
 }//end if submit
 

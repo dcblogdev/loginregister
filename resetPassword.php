@@ -17,8 +17,11 @@ if(empty($row['resetToken'])){
 //if form has been submitted process it
 if(isset($_POST['submit'])){
 
-	if (!isset($_POST['password']) || !isset($_POST['username'])) $error[] = 'Both a Username and Password are required
-	to be entered';
+	if (!isset($_POST['password']) || !isset($_POST['username']))
+		$error[] = 'Both a Username and Password are required to be entered';
+
+	if ( !$user->isValidUsername($_POST['username']))
+		$error[] .= 'Usernames are required to be Alphanumeric and between 3 and 16 characters.';
 
 	//basic validation
 	if(strlen($_POST['password']) < 3){
