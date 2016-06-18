@@ -79,43 +79,7 @@ Class Password {
                 $salt = str_replace('+', '.', base64_encode($salt));
             }
         } else {
-            $buffer = '';
-            $buffer_valid = false;
-            if (function_exists('mcrypt_create_iv') && !defined('PHALANGER')) {
-                $buffer = mcrypt_create_iv($raw_salt_len, MCRYPT_DEV_URANDOM);
-                if ($buffer) {
-                    $buffer_valid = true;
-                }
-            }
-            if (!$buffer_valid && function_exists('openssl_random_pseudo_bytes')) {
-                $buffer = openssl_random_pseudo_bytes($raw_salt_len);
-                if ($buffer) {
-                    $buffer_valid = true;
-                }
-            }
-            if (!$buffer_valid && is_readable('/dev/urandom')) {
-                $f = fopen('/dev/urandom', 'r');
-                $read = strlen($buffer);
-                while ($read < $raw_salt_len) {
-                    $buffer .= fread($f, $raw_salt_len - $read);
-                    $read = strlen($buffer);
-                }
-                fclose($f);
-                if ($read >= $raw_salt_len) {
-                    $buffer_valid = true;
-                }
-            }
-            if (!$buffer_valid || strlen($buffer) < $raw_salt_len) {
-                $bl = strlen($buffer);
-                for ($i = 0; $i < $raw_salt_len; $i++) {
-                    if ($i < $bl) {
-                        $buffer[$i] = $buffer[$i] ^ chr(mt_rand(0, 255));
-                    } else {
-                        $buffer .= chr(mt_rand(0, 255));
-                    }
-                }
-            }
-            $salt = str_replace('+', '.', base64_encode($buffer));
+            $salt = str_replace('+', '.', base64_encode($this->generate_entropy($required_salt_len)));
         }
         $salt = substr($salt, 0, $required_salt_len);
 
@@ -128,6 +92,54 @@ Class Password {
         }
 
         return $ret;
+    }
+
+
+    /**
+     * Generates Entropy using the safest available method, falling back to less preferred methods depending on support
+     *
+     * @param int $bytes
+     *
+     * @return string Returns raw bytes
+     */
+    function generate_entropy($bytes){
+        $buffer = '';
+        $buffer_valid = false;
+        if (function_exists('mcrypt_create_iv') && !defined('PHALANGER')) {
+            $buffer = mcrypt_create_iv($bytes, MCRYPT_DEV_URANDOM);
+            if ($buffer) {
+                $buffer_valid = true;
+            }
+        }
+        if (!$buffer_valid && function_exists('openssl_random_pseudo_bytes')) {
+            $buffer = openssl_random_pseudo_bytes($bytes);
+            if ($buffer) {
+                $buffer_valid = true;
+            }
+        }
+        if (!$buffer_valid && is_readable('/dev/urandom')) {
+            $f = fopen('/dev/urandom', 'r');
+            $read = strlen($buffer);
+            while ($read < $bytes) {
+                $buffer .= fread($f, $bytes - $read);
+                $read = strlen($buffer);
+            }
+            fclose($f);
+            if ($read >= $bytes) {
+                $buffer_valid = true;
+            }
+        }
+        if (!$buffer_valid || strlen($buffer) < $bytes) {
+            $bl = strlen($buffer);
+            for ($i = 0; $i < $bytes; $i++) {
+                if ($i < $bl) {
+                    $buffer[$i] = $buffer[$i] ^ chr(mt_rand(0, 255));
+                } else {
+                    $buffer .= chr(mt_rand(0, 255));
+                }
+            }
+        }
+        return $buffer;
     }
 
     /**
