@@ -3,22 +3,34 @@
 require_once('includes/config.php');
 
 //check if already logged in move to home page
-if( $user->is_logged_in() ){ header('Location: index.php'); } 
+if( $user->is_logged_in() ){ header('Location: index.php'); exit(); }
 
 //process login form if submitted
 if(isset($_POST['submit'])){
 
+	if (!isset($_POST['username'])) $error[] = "Please fill out all fields";
+	if (!isset($_POST['password'])) $error[] = "Please fill out all fields";
+
 	$username = $_POST['username'];
-	$password = $_POST['password'];
-	
-	if($user->login($username,$password)){ 
-		$_SESSION['username'] = $username;
-		header('Location: memberpage.php');
-		exit;
-	
-	} else {
-		$error[] = 'Wrong username or password or your account has not been activated.';
+	if ( $user->isValidUsername($username)){
+		if (!isset($_POST['password'])){
+			$error[] = 'A password must be entered';
+		}
+		$password = $_POST['password'];
+
+		if($user->login($username,$password)){
+			$_SESSION['username'] = $username;
+			header('Location: memberpage.php');
+			exit;
+
+		} else {
+			$error[] = 'Wrong username or password or your account has not been activated.';
+		}
+	}else{
+		$error[] = 'Usernames are required to be Alphanumeric, and between 3-16 characters long';
 	}
+
+
 
 }//end if submit
 
@@ -69,7 +81,7 @@ require('layout/header.php');
 				?>
 
 				<div class="form-group">
-					<input type="text" name="username" id="username" class="form-control input-lg" placeholder="User Name" value="<?php if(isset($error)){ echo $_POST['username']; } ?>" tabindex="1">
+					<input type="text" name="username" id="username" class="form-control input-lg" placeholder="User Name" value="<?php if(isset($error)){ echo htmlspecialchars($_POST['username'], ENT_QUOTES); } ?>" tabindex="1">
 				</div>
 
 				<div class="form-group">

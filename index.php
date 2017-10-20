@@ -1,17 +1,23 @@
 <?php require('includes/config.php');
 
 //if logged in redirect to members page
-if( $user->is_logged_in() ){ header('Location: memberpage.php'); }
+if( $user->is_logged_in() ){ header('Location: memberpage.php'); exit(); }
 
 //if form has been submitted process it
 if(isset($_POST['submit'])){
 
+    if (!isset($_POST['username'])) $error[] = "Please fill out all fields";
+    if (!isset($_POST['email'])) $error[] = "Please fill out all fields";
+    if (!isset($_POST['password'])) $error[] = "Please fill out all fields";
+
+	$username = $_POST['username'];
+
 	//very basic validation
-	if(strlen($_POST['username']) < 3){
-		$error[] = 'Username is too short.';
+	if(!$user->isValidUsername($username)){
+		$error[] = 'Usernames must be at least 3 Alphanumeric characters';
 	} else {
 		$stmt = $db->prepare('SELECT username FROM members WHERE username = :username');
-		$stmt->execute(array(':username' => $_POST['username']));
+		$stmt->execute(array(':username' => $username));
 		$row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 		if(!empty($row['username'])){
@@ -33,11 +39,12 @@ if(isset($_POST['submit'])){
 	}
 
 	//email validation
-	if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
+	$email = htmlspecialchars_decode($_POST['email'], ENT_QUOTES);
+	if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
 	    $error[] = 'Please enter a valid email address';
 	} else {
 		$stmt = $db->prepare('SELECT email FROM members WHERE email = :email');
-		$stmt->execute(array(':email' => $_POST['email']));
+		$stmt->execute(array(':email' => $email));
 		$row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 		if(!empty($row['email'])){
@@ -61,9 +68,9 @@ if(isset($_POST['submit'])){
 			//insert into database with a prepared statement
 			$stmt = $db->prepare('INSERT INTO members (username,password,email,active) VALUES (:username, :password, :email, :active)');
 			$stmt->execute(array(
-				':username' => $_POST['username'],
+				':username' => $username,
 				':password' => $hashedpassword,
-				':email' => $_POST['email'],
+				':email' => $email,
 				':active' => $activasion
 			));
 			$id = $db->lastInsertId('memberID');
@@ -128,10 +135,10 @@ require('layout/header.php');
 				?>
 
 				<div class="form-group">
-					<input type="text" name="username" id="username" class="form-control input-lg" placeholder="User Name" value="<?php if(isset($error)){ echo $_POST['username']; } ?>" tabindex="1">
+					<input type="text" name="username" id="username" class="form-control input-lg" placeholder="User Name" value="<?php if(isset($error)){ echo htmlspecialchars($_POST['username'], ENT_QUOTES); } ?>" tabindex="1">
 				</div>
 				<div class="form-group">
-					<input type="email" name="email" id="email" class="form-control input-lg" placeholder="Email Address" value="<?php if(isset($error)){ echo $_POST['email']; } ?>" tabindex="2">
+					<input type="email" name="email" id="email" class="form-control input-lg" placeholder="Email Address" value="<?php if(isset($error)){ echo htmlspecialchars($_POST['email'], ENT_QUOTES); } ?>" tabindex="2">
 				</div>
 				<div class="row">
 					<div class="col-xs-6 col-sm-6 col-md-6">

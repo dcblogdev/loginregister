@@ -1,10 +1,12 @@
 <?php require('includes/config.php'); 
 
 //if logged in redirect to members page
-if( $user->is_logged_in() ){ header('Location: memberpage.php'); } 
+if( $user->is_logged_in() ){ header('Location: memberpage.php'); exit(); }
+
+$resetToken = hash('SHA256', ($_GET['key']));
 
 $stmt = $db->prepare('SELECT resetToken, resetComplete FROM members WHERE resetToken = :token');
-$stmt->execute(array(':token' => $_GET['key']));
+$stmt->execute(array(':token' => $resetToken));
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 //if no token from db then kill the page
@@ -16,6 +18,9 @@ if(empty($row['resetToken'])){
 
 //if form has been submitted process it
 if(isset($_POST['submit'])){
+
+	if (!isset($_POST['password']) || !isset($_POST['passwordConfirm']))
+		$error[] = 'Both Password fields are required to be entered';
 
 	//basic validation
 	if(strlen($_POST['password']) < 3){
