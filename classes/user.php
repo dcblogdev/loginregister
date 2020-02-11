@@ -51,7 +51,7 @@ class User
 
 		$row = $this->get_user_hash($username);
 
-		if (password_verify($password, $row['password']) == 1){
+		if (password_verify($password, $row['password'])) {
 
 		    $_SESSION['loggedin'] = true;
 		    $_SESSION['username'] = $row['username'];
