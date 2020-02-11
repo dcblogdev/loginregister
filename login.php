@@ -8,17 +8,23 @@ if( $user->is_logged_in() ){ header('Location: index.php'); exit(); }
 //process login form if submitted
 if(isset($_POST['submit'])){
 
-	if (!isset($_POST['username'])) $error[] = "Please fill out all fields";
-	if (!isset($_POST['password'])) $error[] = "Please fill out all fields";
+	if (! isset($_POST['username'])) {
+		$error[] = "Please fill out all fields";
+	}
+
+	if (! isset($_POST['password'])) {
+		$error[] = "Please fill out all fields";
+	}
 
 	$username = $_POST['username'];
-	if ( $user->isValidUsername($username)){
-		if (!isset($_POST['password'])){
+	if ($user->isValidUsername($username)){
+		if (! isset($_POST['password'])){
 			$error[] = 'A password must be entered';
 		}
+
 		$password = $_POST['password'];
 
-		if($user->login($username,$password)){
+		if ($user->login($username, $password)){
 			$_SESSION['username'] = $username;
 			header('Location: memberpage.php');
 			exit;
@@ -29,8 +35,6 @@ if(isset($_POST['submit'])){
 	}else{
 		$error[] = 'Usernames are required to be Alphanumeric, and between 3-16 characters long';
 	}
-
-
 
 }//end if submit
 
@@ -54,13 +58,13 @@ require('layout/header.php');
 
 				<?php
 				//check for any errors
-				if(isset($error)){
-					foreach($error as $error){
+				if (isset($error)){
+					foreach ($error as $error){
 						echo '<p class="bg-danger">'.$error.'</p>';
 					}
 				}
 
-				if(isset($_GET['action'])){
+				if (isset($_GET['action'])){
 
 					//check the action
 					switch ($_GET['action']) {

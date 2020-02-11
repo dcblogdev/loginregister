@@ -1,31 +1,36 @@
 <?php require('includes/config.php');
 
 //if logged in redirect to members page
-if( $user->is_logged_in() ){ header('Location: memberpage.php'); exit(); }
+if ($user->is_logged_in()){ 
+	header('Location: memberpage.php'); 
+	exit(); 
+}
 
 //if form has been submitted process it
-if(isset($_POST['submit'])){
+if (isset($_POST['submit'])){
 
 	//Make sure all POSTS are declared
-	if (!isset($_POST['email'])) $error[] = "Please fill out all fields";
+	if (! isset($_POST['email'])) {
+		$error[] = "Please fill out all fields";
+	}
 
 
 	//email validation
-	if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
+	if (! filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
 	    $error[] = 'Please enter a valid email address';
 	} else {
 		$stmt = $db->prepare('SELECT email FROM members WHERE email = :email');
 		$stmt->execute(array(':email' => $_POST['email']));
 		$row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-		if(empty($row['email'])){
+		if (empty($row['email'])){
 			$error[] = 'Email provided is not recognised.';
 		}
 
 	}
 
 	//if no errors have been created carry on
-	if(!isset($error)){
+	if (! isset($error)){
 
 		//create the activation code
 		$stmt = $db->prepare('SELECT password, email FROM members WHERE email = :email');
@@ -64,9 +69,7 @@ if(isset($_POST['submit'])){
 		} catch(PDOException $e) {
 		    $error[] = $e->getMessage();
 		}
-
 	}
-
 }
 
 //define page title
@@ -88,13 +91,13 @@ require('layout/header.php');
 
 				<?php
 				//check for any errors
-				if(isset($error)){
+				if (isset($error)){
 					foreach($error as $error){
 						echo '<p class="bg-danger">'.$error.'</p>';
 					}
 				}
 
-				if(isset($_GET['action'])){
+				if (isset($_GET['action'])){
 
 					//check the action
 					switch ($_GET['action']) {
