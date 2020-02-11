@@ -33,18 +33,14 @@ if (isset($_POST['submit'])){
 	if (! isset($error)){
 
 		//create the activation code
-		$stmt = $db->prepare('SELECT password, email FROM members WHERE email = :email');
-		$stmt->execute(array(':email' => $_POST['email']));
-		$row = $stmt->fetch(PDO::FETCH_ASSOC);
-		$token = hash_hmac('SHA256', $user->generate_entropy(8), $row['password']);//Hash and Key the random data
-        $storedToken = hash('SHA256', ($token));//Hash the key stored in the database, the normal value is sent to the user
+		$token = md5(uniqid(rand(),true));
 
 		try {
 
 			$stmt = $db->prepare("UPDATE members SET resetToken = :token, resetComplete='No' WHERE email = :email");
 			$stmt->execute(array(
 				':email' => $row['email'],
-				':token' => $storedToken
+				':token' => $token
 			));
 
 			//send email

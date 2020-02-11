@@ -6,7 +6,7 @@ if ($user->is_logged_in() ){
 	exit(); 
 }
 
-$resetToken = hash('SHA256', ($_GET['key']));
+$resetToken = $_GET['key'];
 
 $stmt = $db->prepare('SELECT resetToken, resetComplete FROM members WHERE resetToken = :token');
 $stmt->execute(array(':token' => $resetToken));
