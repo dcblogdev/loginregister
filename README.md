@@ -1,7 +1,7 @@
-Login Register
+Tutorial source code: Login Register
 =============
 
-These files acompany the tutorial: [Login and Registration system with PHP](https://daveismyname.blog/login-and-registration-system-with-php)
+These files acompany the tutorial: [Login and Registration system with PHP](https://dcblog.dev/login-and-registration-system-with-php)
 
 ## send emails locally
 
