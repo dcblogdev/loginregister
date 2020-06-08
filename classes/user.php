@@ -2,28 +2,28 @@
 
 class User 
 {
-    private $_db;
+	private $_db;
 	private $_ignoreCase;
 
-    function __construct($db)
-    {
-    	$this->_db = $db;
+	function __construct($db)
+	{
+		$this->_db = $db;
 		$this->_ignoreCase = false;
-    }
+	}
 	
 	public function setIgnoreCase($sensitive) {
-        $this->_ignoreCase = $sensitive;
-    }
+		$this->_ignoreCase = $sensitive;
+	}
 
-    public function getIgnoreCase() {
-        return $this->_ignoreCase;
-    }
+	public function getIgnoreCase() {
+		return $this->_ignoreCase;
+	}
 
 	private function get_user_hash($username)
 	{
 		try {
 			if ($this->_ignoreCase) {
-			    $stmt = $this->_db->prepare('SELECT password, username, memberID FROM members WHERE LOWER(username) = LOWER(:username) AND active="Yes" ');
+				$stmt = $this->_db->prepare('SELECT password, username, memberID FROM members WHERE LOWER(username) = LOWER(:username) AND active="Yes" ');
 			} else {
 				$stmt = $this->_db->prepare('SELECT password, username, memberID FROM members WHERE username = :username AND active="Yes" ');
 			}
@@ -32,7 +32,7 @@ class User
 			return $stmt->fetch();
 
 		} catch(PDOException $e) {
-		    echo '<p class="bg-danger">'.$e->getMessage().'</p>';
+			echo '<p class="bg-danger">'.$e->getMessage().'</p>';
 		}
 	}
 
@@ -67,11 +67,11 @@ class User
 
 		if (password_verify($password, $row['password'])) {
 
-		    $_SESSION['loggedin'] = true;
-		    $_SESSION['username'] = $row['username'];
-		    $_SESSION['memberID'] = $row['memberID'];
+			$_SESSION['loggedin'] = true;
+			$_SESSION['username'] = $row['username'];
+			$_SESSION['memberID'] = $row['memberID'];
 		    
-		    return true;
+			return true;
 		}
 		return false;
 	}
