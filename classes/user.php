@@ -3,16 +3,30 @@
 class User 
 {
     private $_db;
+	private $_ignoreCase;
 
     function __construct($db)
     {
     	$this->_db = $db;
+		$this->_ignoreCase = false;
+    }
+	
+	public function setIgnoreCase($sensitive) {
+        $this->_ignoreCase = $sensitive;
+    }
+
+    public function getIgnoreCase() {
+        return $this->_ignoreCase;
     }
 
 	private function get_user_hash($username)
 	{
 		try {
-			$stmt = $this->_db->prepare('SELECT password, username, memberID FROM members WHERE username = :username AND active="Yes" ');
+			if ($this->_ignoreCase) {
+			    $stmt = $this->_db->prepare('SELECT password, username, memberID FROM members WHERE LOWER(username) = LOWER(:username) AND active="Yes" ');
+			} else {
+				$stmt = $this->_db->prepare('SELECT password, username, memberID FROM members WHERE username = :username AND active="Yes" ');
+			}
 			$stmt->execute(array('username' => $username));
 
 			return $stmt->fetch();
@@ -59,6 +73,7 @@ class User
 		    
 		    return true;
 		}
+		return false;
 	}
 
 	public function logout()
