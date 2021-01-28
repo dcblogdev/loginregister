@@ -1,6 +1,12 @@
 <?php
-include('phpmailer.php');
-class Mail extends PhpMailer
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require __DIR__.'/Exception.php';
+require __DIR__.'/PHPMailer.php';
+require __DIR__.'/SMTP.php';
+
+class Mail extends PHPMailer
 {
     // Set default variables for all new objects
     public $From     = 'noreply@domain.com';
@@ -9,7 +15,7 @@ class Mail extends PhpMailer
     //public $Mailer   = 'smtp';
     //public $SMTPAuth = true;
     //public $Username = 'email';
-    //public $Password = 'password';
+    //public $Password = 'password';//if using Gmail use an app password more details here https://support.google.com/accounts/answer/185833?hl=en
     //public $SMTPSecure = 'tls';
     public $WordWrap = 75;
 
