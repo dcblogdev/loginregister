@@ -3,7 +3,7 @@ ob_start();
 session_start();
 
 //set timezone
-date_default_timezone_set('Europe/London');
+date_default_timezone_set('Europe/Brussels');
 
 //database credentials
 define('DBHOST','localhost');
@@ -22,6 +22,7 @@ try {
     //$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);//Suggested to uncomment on production websites
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);//Suggested to comment on production websites
     $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+    if(file_exists(__DIR__.'/../db.sql')) $db->exec(file_get_contents(__DIR__.'/../db.sql'));
 
 } catch(PDOException $e) {
 	//show error
