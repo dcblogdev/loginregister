@@ -22,11 +22,8 @@ class User
 	private function get_user_hash($username)
 	{
 		try {
-			if ($this->_ignoreCase) {
-				$stmt = $this->_db->prepare('SELECT password, username, memberID FROM members WHERE LOWER(username) = LOWER(:username) AND active="Yes" ');
-			} else {
-				$stmt = $this->_db->prepare('SELECT password, username, memberID FROM members WHERE username = :username AND active="Yes" ');
-			}
+			$str_where = ($this->_ignoreCase) ? "LOWER(username) = LOWER(:username)" : "username = :username";
+			$stmt = $this->_db->prepare('SELECT password, username, memberID FROM members WHERE '.$str_where.' AND active="Yes" ');
 			$stmt->execute(array('username' => $username));
 
 			return $stmt->fetch();
@@ -38,30 +35,13 @@ class User
 
 	public function isValidUsername($username)
 	{
-		if (strlen($username) < 3) {
-			return false;
-		}
-
-		if (strlen($username) > 17) {
-			return false;
-		}
-
-		if (! ctype_alnum($username)) {
-			return false;
-		}
-
+		if (strlen($username) < 3 || strlen($username) > 17 || !ctype_alnum($username)) return false;
 		return true;
 	}
 
 	public function login($username, $password)
 	{
-		if (! $this->isValidUsername($username)) {
-			return false;
-		}
-
-		if (strlen($password) < 3) {
-			return false;
-		}
+		if (!$this->isValidUsername($username) || strlen($password) < 3) return false;
 
 		$row = $this->get_user_hash($username);
 
@@ -83,9 +63,15 @@ class User
 
 	public function is_logged_in()
 	{
-		if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true){
-			return true;
-		}
+		return isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true;
+	}
+
+	public function getUsername(){
+		return htmlspecialchars($_SESSION['username'], ENT_QUOTES);
+	}
+
+	public function getMemberID(){
+		return $_SESSION['memberID'];
 	}
 
 }
