@@ -49,7 +49,7 @@ require('layout/header.php');
 <section class="container">
 	<section class="row">
 	    <section class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-			<?php require_once('./layout/views/vRegistration.php'); ?>
+			<?php require_once('layout/views/vRegistration.php'); ?>
 		</section>
 	</section>
 </section>
