@@ -3,7 +3,7 @@
     <p><a href='./'>Back to home page</a></p>
     <hr>
 
-    <?php require(__DIR__.'/../error.php'); ?>
+    <?php require('layout/error.php'); ?>
 
     <p class="form-group"><input type="text" name="username" id="username" class="form-control input-lg" placeholder="User Name" value="<?php if(isset($error)){ echo htmlspecialchars($_POST['username'], ENT_QUOTES); } ?>" tabindex="1"></p>
     <p class="form-group"><input type="password" name="password" id="password" class="form-control input-lg" placeholder="Password" tabindex="3"></p>

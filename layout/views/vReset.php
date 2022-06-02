@@ -3,7 +3,7 @@
     <p><a href='login.php'>Back to login page</a></p>
     <hr>
 
-    <?php require(__DIR__.'/../error.php'); ?>
+    <?php require('layout/error.php'); ?>
 
     <p class="form-group">
         <input type="email" name="email" id="email" class="form-control input-lg" placeholder="Email" value="" tabindex="1">

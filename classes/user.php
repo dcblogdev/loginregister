@@ -1,5 +1,4 @@
 <?php
-
 class User 
 {
 	private $_db;
@@ -21,22 +20,16 @@ class User
 
 	private function get_user_hash($username)
 	{
-		try {
-			$str_where = ($this->_ignoreCase) ? "LOWER(username) = LOWER(:username)" : "username = :username";
-			$stmt = $this->_db->prepare('SELECT password, username, memberID FROM members WHERE '.$str_where.' AND active="Yes" ');
-			$stmt->execute(array('username' => $username));
-
-			return $stmt->fetch();
-
-		} catch(PDOException $e) {
-			echo '<p class="bg-danger">'.$e->getMessage().'</p>';
-		}
+		$str_where = ($this->_ignoreCase) ? "LOWER(username) = LOWER(:username)" : "username = :username";
+		return $this->_db->q(
+			'SELECT password, username, memberID FROM members WHERE '.$str_where.' AND active="Yes" ',
+			['username' => $username]
+		);
 	}
 
 	public function isValidUsername($username)
 	{
-		if (strlen($username) < 3 || strlen($username) > 17 || !ctype_alnum($username)) return false;
-		return true;
+		return !(strlen($username) < 3 || strlen($username) > 17 || !ctype_alnum($username));
 	}
 
 	public function login($username, $password)

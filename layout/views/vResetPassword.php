@@ -2,7 +2,7 @@
     <h2>Change Password</h2>
     <hr>
 
-    <?php require(__DIR__.'/../error.php'); ?>
+    <?php require('layout/error.php'); ?>
 
     <section class="row">
         <section class="col-xs-6 col-sm-6 col-md-6">

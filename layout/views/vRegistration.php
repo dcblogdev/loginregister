@@ -3,7 +3,7 @@
     <p>Already a member? <a href='login.php'>Login</a></p>
     <hr>
 
-    <?php require(__DIR__.'/../error.php'); ?>
+    <?php require('layout/error.php'); ?>
 
     <p class="form-group"><input type="text" name="username" id="username" class="form-control input-lg" placeholder="User Name" value="<?php if(isset($error)){ echo htmlspecialchars($_POST['username'], ENT_QUOTES); } ?>" tabindex="1"></p>
     <p class="form-group"><input type="email" name="email" id="email" class="form-control input-lg" placeholder="Email Address" value="<?php if(isset($error)){ echo htmlspecialchars($_POST['email'], ENT_QUOTES); } ?>" tabindex="2"></p>

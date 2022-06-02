@@ -3,7 +3,7 @@ ob_start();
 session_start();
 
 //set timezone
-date_default_timezone_set('Europe/Brussels');
+date_default_timezone_set('Europe/London');
 
 //database credentials
 define('DBHOST','localhost');
@@ -15,23 +15,16 @@ define('DBNAME','database name');
 define('DIR','http://domain.com/');
 define('SITEEMAIL','noreply@domain.com');
 
-try {
-
-	//create PDO connection
-	$db = new PDO("mysql:host=".DBHOST.";charset=utf8mb4;dbname=".DBNAME, DBUSER, DBPASS);
-    //$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);//Suggested to uncomment on production websites
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);//Suggested to comment on production websites
-    $db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-    if(file_exists(__DIR__.'/../db.sql')) $db->exec(file_get_contents(__DIR__.'/../db.sql'));
-
-} catch(PDOException $e) {
-	//show error
-    echo '<p class="bg-danger">'.$e->getMessage().'</p>';
-    exit;
-}
-
 //include the user class, pass in the database connection
-include('classes/user.php');
-include('classes/phpmailer/mail.php');
+include_once('includes/pdo.php');
+include_once('classes/user.php');
+include_once('classes/phpmailer/mail.php');
+include_once('classes/controller.php');
+
+// create PDO connection
+$db = new DBPDO(DBNAME, DBUSER, DBPASS, DBHOST);
+// create User
 $user = new User($db);
+// create controller
+$controller = new Controller($db, $user);
 ?>
