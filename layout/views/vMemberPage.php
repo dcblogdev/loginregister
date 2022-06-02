@@ -1,4 +1,8 @@
-<h3><?php echo htmlspecialchars($_SESSION['username'], ENT_QUOTES); ?></h3>
+<?php
+    $username = htmlspecialchars($_SESSION['username'], ENT_QUOTES);
+?>
+
+<h3><?php echo $username; ?></h3>
 <p><a href="logout.php">Logout</a></p>
 
 <?php for($i=0; $i < 2; $i++){ ?>
